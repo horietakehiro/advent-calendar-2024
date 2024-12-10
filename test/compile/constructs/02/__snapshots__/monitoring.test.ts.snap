@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogMetricAlarmFactories cseRateAlarm - スナップショットテスト: cseRateAlarm 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "LogGroupAllRequestCountE37893C0": {
+      "Properties": {
+        "FilterPattern": "[..., agent != "ELB-HealthChecker*", xForwardedFor]",
+        "LogGroupName": {
+          "Ref": "LogGroupF5B46931",
+        },
+        "MetricTransformations": [
+          {
+            "DefaultValue": 0,
+            "MetricName": "AllRequestCount",
+            "MetricNamespace": "WebApp",
+            "MetricValue": "1",
+            "Unit": "Count",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "LogGroupCSECountDBFD5086": {
+      "Properties": {
+        "FilterPattern": "[..., status_code = 4*, bytes, referer, agent != "ELB-HealthChecker*", xForwardedFor]",
+        "LogGroupName": {
+          "Ref": "LogGroupF5B46931",
+        },
+        "MetricTransformations": [
+          {
+            "DefaultValue": 0,
+            "MetricName": "CSECount",
+            "MetricNamespace": "WebApp",
+            "MetricValue": "1",
+            "Unit": "Count",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "LogGroupF5B46931": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "cseRateAlrm30DC54C5": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":automate:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":ec2:reboot",
+              ],
+            ],
+          },
+        ],
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "(cse / (all+0.01)) * 100",
+            "Id": "expr_1",
+          },
+          {
+            "Id": "cse",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "CSECount",
+                "Namespace": "WebApp",
+              },
+              "Period": 1800,
+              "Stat": "Sum",
+              "Unit": "Count",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "all",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "AllRequestCount",
+                "Namespace": "WebApp",
+              },
+              "Period": 1800,
+              "Stat": "Sum",
+              "Unit": "Count",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 99,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`LogMetricAlarmFactories sseRateAlarm - スナップショットテスト: sseRateAlarm 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "LogGroupF5B46931": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "LogGroupSSECountF5A20371": {
+      "Properties": {
+        "FilterPattern": "[..., request, status_code = 5*, bytes, referer, agent != "ELB-HealthChecker*", xForwardedFor]",
+        "LogGroupName": {
+          "Ref": "LogGroupF5B46931",
+        },
+        "MetricTransformations": [
+          {
+            "DefaultValue": 0,
+            "MetricName": "SSECount",
+            "MetricNamespace": "WebApp",
+            "MetricValue": "1",
+            "Unit": "Count",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "SSERateAlrm87C530C7": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":automate:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":ec2:reboot",
+              ],
+            ],
+          },
+        ],
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "(sse / (all+0.01)) * 100",
+            "Id": "expr_1",
+          },
+          {
+            "Id": "sse",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "SSECount",
+                "Namespace": "WebApp",
+              },
+              "Period": 1800,
+              "Stat": "Sum",
+              "Unit": "Count",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "all",
+            "MetricStat": {
+              "Metric": {
+                "MetricName": "AllRequestCount",
+                "Namespace": "WebApp",
+              },
+              "Period": 1800,
+              "Stat": "Sum",
+              "Unit": "Count",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 99,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

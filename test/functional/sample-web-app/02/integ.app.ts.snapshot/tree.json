@@ -1,0 +1,1831 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "sut-cse-rate-alarm": {
+        "id": "sut-cse-rate-alarm",
+        "path": "sut-cse-rate-alarm",
+        "children": {
+          "SubscrinerLogGroup": {
+            "id": "SubscrinerLogGroup",
+            "path": "sut-cse-rate-alarm/SubscrinerLogGroup",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-cse-rate-alarm/SubscrinerLogGroup/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "retentionInDays": 731
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+              "version": "2.166.0"
+            }
+          },
+          "SubscriberFunction": {
+            "id": "SubscriberFunction",
+            "path": "sut-cse-rate-alarm/SubscriberFunction",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "sut-cse-rate-alarm/SubscriberFunction/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "sut-cse-rate-alarm/SubscriberFunction/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-cse-rate-alarm/SubscriberFunction/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "sut-cse-rate-alarm/SubscriberFunction/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "sut-cse-rate-alarm/SubscriberFunction/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "logs:PutLogEvents",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "SubscrinerLogGroup6F57F23B",
+                                            "Arn"
+                                          ]
+                                        },
+                                        ":*"
+                                      ]
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "SubscriberFunctionServiceRoleDefaultPolicyBDF386B9",
+                            "roles": [
+                              {
+                                "Ref": "SubscriberFunctionServiceRole16092286"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.166.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "sut-cse-rate-alarm/SubscriberFunction/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "sut-cse-rate-alarm/SubscriberFunction/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "sut-cse-rate-alarm/SubscriberFunction/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.166.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-cse-rate-alarm/SubscriberFunction/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "3dc242910380839ba379e8a209861908b5544abadf4d2188b9e04a5b6c6c946c.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "LOG_GROUP_NAME": {
+                          "Ref": "SubscrinerLogGroup6F57F23B"
+                        }
+                      }
+                    },
+                    "handler": "index.handler",
+                    "role": {
+                      "Fn::GetAtt": [
+                        "SubscriberFunctionServiceRole16092286",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "nodejs18.x",
+                    "timeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.166.0"
+                }
+              },
+              "AllowInvoke:sutcseratealarmTopic58B07648": {
+                "id": "AllowInvoke:sutcseratealarmTopic58B07648",
+                "path": "sut-cse-rate-alarm/SubscriberFunction/AllowInvoke:sutcseratealarmTopic58B07648",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "SubscriberFunction20C1DAC6",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "sns.amazonaws.com",
+                    "sourceArn": {
+                      "Ref": "TopicBFC7AF6E"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.166.0"
+                }
+              },
+              "Topic": {
+                "id": "Topic",
+                "path": "sut-cse-rate-alarm/SubscriberFunction/Topic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-cse-rate-alarm/SubscriberFunction/Topic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "endpoint": {
+                          "Fn::GetAtt": [
+                            "SubscriberFunction20C1DAC6",
+                            "Arn"
+                          ]
+                        },
+                        "protocol": "lambda",
+                        "topicArn": {
+                          "Ref": "TopicBFC7AF6E"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.Subscription",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda_nodejs.NodejsFunction",
+              "version": "2.166.0"
+            }
+          },
+          "Topic": {
+            "id": "Topic",
+            "path": "sut-cse-rate-alarm/Topic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-cse-rate-alarm/Topic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.166.0"
+            }
+          },
+          "LogGroup": {
+            "id": "LogGroup",
+            "path": "sut-cse-rate-alarm/LogGroup",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-cse-rate-alarm/LogGroup/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "retentionInDays": 731
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                  "version": "2.166.0"
+                }
+              },
+              "AllRequestCount": {
+                "id": "AllRequestCount",
+                "path": "sut-cse-rate-alarm/LogGroup/AllRequestCount",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-cse-rate-alarm/LogGroup/AllRequestCount/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Logs::MetricFilter",
+                      "aws:cdk:cloudformation:props": {
+                        "filterPattern": "[..., agent != \"ELB-HealthChecker*\", xForwardedFor]",
+                        "logGroupName": {
+                          "Ref": "LogGroupF5B46931"
+                        },
+                        "metricTransformations": [
+                          {
+                            "metricNamespace": "WebApp",
+                            "metricName": "AllRequestCount",
+                            "metricValue": "1",
+                            "defaultValue": 0,
+                            "unit": "Count"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_logs.CfnMetricFilter",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.MetricFilter",
+                  "version": "2.166.0"
+                }
+              },
+              "CSECount": {
+                "id": "CSECount",
+                "path": "sut-cse-rate-alarm/LogGroup/CSECount",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-cse-rate-alarm/LogGroup/CSECount/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Logs::MetricFilter",
+                      "aws:cdk:cloudformation:props": {
+                        "filterPattern": "[..., status_code = 4*, bytes, referer, agent != \"ELB-HealthChecker*\", xForwardedFor]",
+                        "logGroupName": {
+                          "Ref": "LogGroupF5B46931"
+                        },
+                        "metricTransformations": [
+                          {
+                            "metricNamespace": "WebApp",
+                            "metricName": "CSECount",
+                            "metricValue": "1",
+                            "defaultValue": 0,
+                            "unit": "Count"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_logs.CfnMetricFilter",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.MetricFilter",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+              "version": "2.166.0"
+            }
+          },
+          "LogStream": {
+            "id": "LogStream",
+            "path": "sut-cse-rate-alarm/LogStream",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-cse-rate-alarm/LogStream/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogStream",
+                  "aws:cdk:cloudformation:props": {
+                    "logGroupName": {
+                      "Ref": "LogGroupF5B46931"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogStream",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogStream",
+              "version": "2.166.0"
+            }
+          },
+          "cseRateAlrm": {
+            "id": "cseRateAlrm",
+            "path": "sut-cse-rate-alarm/cseRateAlrm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-cse-rate-alarm/cseRateAlrm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "actionsEnabled": true,
+                    "alarmActions": [
+                      {
+                        "Ref": "TopicBFC7AF6E"
+                      }
+                    ],
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 1,
+                    "metrics": [
+                      {
+                        "expression": "(cse / (all+0.01)) * 100",
+                        "id": "expr_1"
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "CSECount",
+                            "namespace": "WebApp"
+                          },
+                          "period": 60,
+                          "stat": "Sum",
+                          "unit": "Count"
+                        },
+                        "id": "cse",
+                        "returnData": false
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "AllRequestCount",
+                            "namespace": "WebApp"
+                          },
+                          "period": 60,
+                          "stat": "Sum",
+                          "unit": "Count"
+                        },
+                        "id": "all",
+                        "returnData": false
+                      }
+                    ],
+                    "threshold": 10,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.166.0"
+            }
+          },
+          "SubscrinerLogStream": {
+            "id": "SubscrinerLogStream",
+            "path": "sut-cse-rate-alarm/SubscrinerLogStream",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-cse-rate-alarm/SubscrinerLogStream/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogStream",
+                  "aws:cdk:cloudformation:props": {
+                    "logGroupName": {
+                      "Ref": "SubscrinerLogGroup6F57F23B"
+                    },
+                    "logStreamName": {
+                      "Ref": "cseRateAlrm30DC54C5"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogStream",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogStream",
+              "version": "2.166.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "sut-cse-rate-alarm/Exports",
+            "children": {
+              "Output{\"Ref\":\"cseRateAlrm30DC54C5\"}": {
+                "id": "Output{\"Ref\":\"cseRateAlrm30DC54C5\"}",
+                "path": "sut-cse-rate-alarm/Exports/Output{\"Ref\":\"cseRateAlrm30DC54C5\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"cseRateAlrm30DC54C5\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"cseRateAlrm30DC54C5\",\"Arn\"]}",
+                "path": "sut-cse-rate-alarm/Exports/Output{\"Fn::GetAtt\":[\"cseRateAlrm30DC54C5\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"LogGroupF5B46931\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"LogGroupF5B46931\",\"Arn\"]}",
+                "path": "sut-cse-rate-alarm/Exports/Output{\"Fn::GetAtt\":[\"LogGroupF5B46931\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Ref\":\"LogGroupF5B46931\"}": {
+                "id": "Output{\"Ref\":\"LogGroupF5B46931\"}",
+                "path": "sut-cse-rate-alarm/Exports/Output{\"Ref\":\"LogGroupF5B46931\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Ref\":\"LogStreamCBF5916A\"}": {
+                "id": "Output{\"Ref\":\"LogStreamCBF5916A\"}",
+                "path": "sut-cse-rate-alarm/Exports/Output{\"Ref\":\"LogStreamCBF5916A\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Ref\":\"SubscrinerLogGroup6F57F23B\"}": {
+                "id": "Output{\"Ref\":\"SubscrinerLogGroup6F57F23B\"}",
+                "path": "sut-cse-rate-alarm/Exports/Output{\"Ref\":\"SubscrinerLogGroup6F57F23B\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"SubscrinerLogGroup6F57F23B\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"SubscrinerLogGroup6F57F23B\",\"Arn\"]}",
+                "path": "sut-cse-rate-alarm/Exports/Output{\"Fn::GetAtt\":[\"SubscrinerLogGroup6F57F23B\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "sut-cse-rate-alarm/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.166.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "sut-cse-rate-alarm/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.166.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.166.0"
+        }
+      },
+      "sut-sse-rate-alarm": {
+        "id": "sut-sse-rate-alarm",
+        "path": "sut-sse-rate-alarm",
+        "children": {
+          "SubscrinerLogGroup": {
+            "id": "SubscrinerLogGroup",
+            "path": "sut-sse-rate-alarm/SubscrinerLogGroup",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-sse-rate-alarm/SubscrinerLogGroup/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "retentionInDays": 731
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+              "version": "2.166.0"
+            }
+          },
+          "SubscriberFunction": {
+            "id": "SubscriberFunction",
+            "path": "sut-sse-rate-alarm/SubscriberFunction",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "sut-sse-rate-alarm/SubscriberFunction/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "sut-sse-rate-alarm/SubscriberFunction/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-sse-rate-alarm/SubscriberFunction/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "sut-sse-rate-alarm/SubscriberFunction/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "sut-sse-rate-alarm/SubscriberFunction/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "logs:PutLogEvents",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "SubscrinerLogGroup6F57F23B",
+                                            "Arn"
+                                          ]
+                                        },
+                                        ":*"
+                                      ]
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "SubscriberFunctionServiceRoleDefaultPolicyBDF386B9",
+                            "roles": [
+                              {
+                                "Ref": "SubscriberFunctionServiceRole16092286"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.166.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "sut-sse-rate-alarm/SubscriberFunction/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "sut-sse-rate-alarm/SubscriberFunction/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "sut-sse-rate-alarm/SubscriberFunction/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.166.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-sse-rate-alarm/SubscriberFunction/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "3dc242910380839ba379e8a209861908b5544abadf4d2188b9e04a5b6c6c946c.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "LOG_GROUP_NAME": {
+                          "Ref": "SubscrinerLogGroup6F57F23B"
+                        }
+                      }
+                    },
+                    "handler": "index.handler",
+                    "role": {
+                      "Fn::GetAtt": [
+                        "SubscriberFunctionServiceRole16092286",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "nodejs18.x",
+                    "timeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.166.0"
+                }
+              },
+              "AllowInvoke:sutsseratealarmTopic9C908C69": {
+                "id": "AllowInvoke:sutsseratealarmTopic9C908C69",
+                "path": "sut-sse-rate-alarm/SubscriberFunction/AllowInvoke:sutsseratealarmTopic9C908C69",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "SubscriberFunction20C1DAC6",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "sns.amazonaws.com",
+                    "sourceArn": {
+                      "Ref": "TopicBFC7AF6E"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.166.0"
+                }
+              },
+              "Topic": {
+                "id": "Topic",
+                "path": "sut-sse-rate-alarm/SubscriberFunction/Topic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-sse-rate-alarm/SubscriberFunction/Topic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                      "aws:cdk:cloudformation:props": {
+                        "endpoint": {
+                          "Fn::GetAtt": [
+                            "SubscriberFunction20C1DAC6",
+                            "Arn"
+                          ]
+                        },
+                        "protocol": "lambda",
+                        "topicArn": {
+                          "Ref": "TopicBFC7AF6E"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.Subscription",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda_nodejs.NodejsFunction",
+              "version": "2.166.0"
+            }
+          },
+          "Topic": {
+            "id": "Topic",
+            "path": "sut-sse-rate-alarm/Topic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-sse-rate-alarm/Topic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {}
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.166.0"
+            }
+          },
+          "LogGroup": {
+            "id": "LogGroup",
+            "path": "sut-sse-rate-alarm/LogGroup",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-sse-rate-alarm/LogGroup/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "retentionInDays": 731
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                  "version": "2.166.0"
+                }
+              },
+              "AllRequestCount": {
+                "id": "AllRequestCount",
+                "path": "sut-sse-rate-alarm/LogGroup/AllRequestCount",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-sse-rate-alarm/LogGroup/AllRequestCount/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Logs::MetricFilter",
+                      "aws:cdk:cloudformation:props": {
+                        "filterPattern": "[..., agent != \"ELB-HealthChecker*\", xForwardedFor]",
+                        "logGroupName": {
+                          "Ref": "LogGroupF5B46931"
+                        },
+                        "metricTransformations": [
+                          {
+                            "metricNamespace": "WebApp",
+                            "metricName": "AllRequestCount",
+                            "metricValue": "1",
+                            "defaultValue": 0,
+                            "unit": "Count"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_logs.CfnMetricFilter",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.MetricFilter",
+                  "version": "2.166.0"
+                }
+              },
+              "SSECount": {
+                "id": "SSECount",
+                "path": "sut-sse-rate-alarm/LogGroup/SSECount",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "sut-sse-rate-alarm/LogGroup/SSECount/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Logs::MetricFilter",
+                      "aws:cdk:cloudformation:props": {
+                        "filterPattern": "[..., request, status_code = 5*, bytes, referer, agent != \"ELB-HealthChecker*\", xForwardedFor]",
+                        "logGroupName": {
+                          "Ref": "LogGroupF5B46931"
+                        },
+                        "metricTransformations": [
+                          {
+                            "metricNamespace": "WebApp",
+                            "metricName": "SSECount",
+                            "metricValue": "1",
+                            "defaultValue": 0,
+                            "unit": "Count"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_logs.CfnMetricFilter",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.MetricFilter",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+              "version": "2.166.0"
+            }
+          },
+          "LogStream": {
+            "id": "LogStream",
+            "path": "sut-sse-rate-alarm/LogStream",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-sse-rate-alarm/LogStream/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogStream",
+                  "aws:cdk:cloudformation:props": {
+                    "logGroupName": {
+                      "Ref": "LogGroupF5B46931"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogStream",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogStream",
+              "version": "2.166.0"
+            }
+          },
+          "SSERateAlrm": {
+            "id": "SSERateAlrm",
+            "path": "sut-sse-rate-alarm/SSERateAlrm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-sse-rate-alarm/SSERateAlrm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "actionsEnabled": true,
+                    "alarmActions": [
+                      {
+                        "Ref": "TopicBFC7AF6E"
+                      }
+                    ],
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "evaluationPeriods": 1,
+                    "metrics": [
+                      {
+                        "expression": "(sse / (all+0.01)) * 100",
+                        "id": "expr_1"
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "SSECount",
+                            "namespace": "WebApp"
+                          },
+                          "period": 60,
+                          "stat": "Sum",
+                          "unit": "Count"
+                        },
+                        "id": "sse",
+                        "returnData": false
+                      },
+                      {
+                        "metricStat": {
+                          "metric": {
+                            "metricName": "AllRequestCount",
+                            "namespace": "WebApp"
+                          },
+                          "period": 60,
+                          "stat": "Sum",
+                          "unit": "Count"
+                        },
+                        "id": "all",
+                        "returnData": false
+                      }
+                    ],
+                    "threshold": 10,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.166.0"
+            }
+          },
+          "SubscrinerLogStream": {
+            "id": "SubscrinerLogStream",
+            "path": "sut-sse-rate-alarm/SubscrinerLogStream",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "sut-sse-rate-alarm/SubscrinerLogStream/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogStream",
+                  "aws:cdk:cloudformation:props": {
+                    "logGroupName": {
+                      "Ref": "SubscrinerLogGroup6F57F23B"
+                    },
+                    "logStreamName": {
+                      "Ref": "SSERateAlrm87C530C7"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogStream",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogStream",
+              "version": "2.166.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "sut-sse-rate-alarm/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"SSERateAlrm87C530C7\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"SSERateAlrm87C530C7\",\"Arn\"]}",
+                "path": "sut-sse-rate-alarm/Exports/Output{\"Fn::GetAtt\":[\"SSERateAlrm87C530C7\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"LogGroupF5B46931\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"LogGroupF5B46931\",\"Arn\"]}",
+                "path": "sut-sse-rate-alarm/Exports/Output{\"Fn::GetAtt\":[\"LogGroupF5B46931\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"SubscrinerLogGroup6F57F23B\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"SubscrinerLogGroup6F57F23B\",\"Arn\"]}",
+                "path": "sut-sse-rate-alarm/Exports/Output{\"Fn::GetAtt\":[\"SubscrinerLogGroup6F57F23B\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Ref\":\"SSERateAlrm87C530C7\"}": {
+                "id": "Output{\"Ref\":\"SSERateAlrm87C530C7\"}",
+                "path": "sut-sse-rate-alarm/Exports/Output{\"Ref\":\"SSERateAlrm87C530C7\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Ref\":\"LogGroupF5B46931\"}": {
+                "id": "Output{\"Ref\":\"LogGroupF5B46931\"}",
+                "path": "sut-sse-rate-alarm/Exports/Output{\"Ref\":\"LogGroupF5B46931\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Ref\":\"LogStreamCBF5916A\"}": {
+                "id": "Output{\"Ref\":\"LogStreamCBF5916A\"}",
+                "path": "sut-sse-rate-alarm/Exports/Output{\"Ref\":\"LogStreamCBF5916A\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              },
+              "Output{\"Ref\":\"SubscrinerLogGroup6F57F23B\"}": {
+                "id": "Output{\"Ref\":\"SubscrinerLogGroup6F57F23B\"}",
+                "path": "sut-sse-rate-alarm/Exports/Output{\"Ref\":\"SubscrinerLogGroup6F57F23B\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "sut-sse-rate-alarm/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.166.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "sut-sse-rate-alarm/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.166.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.166.0"
+        }
+      },
+      "test-log-metric-alarm": {
+        "id": "test-log-metric-alarm",
+        "path": "test-log-metric-alarm",
+        "children": {
+          "DefaultTest": {
+            "id": "DefaultTest",
+            "path": "test-log-metric-alarm/DefaultTest",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "test-log-metric-alarm/DefaultTest/Default",
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0"
+                }
+              },
+              "DeployAssert": {
+                "id": "DeployAssert",
+                "path": "test-log-metric-alarm/DefaultTest/DeployAssert",
+                "children": {
+                  "AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a": {
+                    "id": "AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a",
+                    "children": {
+                      "SdkProvider": {
+                        "id": "SdkProvider",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a/SdkProvider",
+                        "children": {
+                          "AssertionsProvider": {
+                            "id": "AssertionsProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a/SdkProvider/AssertionsProvider",
+                            "constructInfo": {
+                              "fqn": "constructs.Construct",
+                              "version": "10.3.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a/Default",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a/Default/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "AssertionResults": {
+                        "id": "AssertionResults",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarmsc83816377189fd63ea42629561b83e6a/AssertionResults",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnOutput",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/integ-tests-alpha.AwsApiCall",
+                      "version": "2.166.0-alpha.0"
+                    }
+                  },
+                  "SingletonFunction1488541a7b23466481b69b4408076b81": {
+                    "id": "SingletonFunction1488541a7b23466481b69b4408076b81",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction1488541a7b23466481b69b4408076b81",
+                    "children": {
+                      "Staging": {
+                        "id": "Staging",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction1488541a7b23466481b69b4408076b81/Staging",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.AssetStaging",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "Role": {
+                        "id": "Role",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction1488541a7b23466481b69b4408076b81/Role",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "Handler": {
+                        "id": "Handler",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction1488541a7b23466481b69b4408076b81/Handler",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0"
+                    }
+                  },
+                  "LatestNodeRuntimeMap": {
+                    "id": "LatestNodeRuntimeMap",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/LatestNodeRuntimeMap",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnMapping",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents1fac0ec56ff6e896e3add2d22b44b4d9": {
+                    "id": "AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents1fac0ec56ff6e896e3add2d22b44b4d9",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents1fac0ec56ff6e896e3add2d22b44b4d9",
+                    "children": {
+                      "SdkProvider": {
+                        "id": "SdkProvider",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents1fac0ec56ff6e896e3add2d22b44b4d9/SdkProvider",
+                        "children": {
+                          "AssertionsProvider": {
+                            "id": "AssertionsProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents1fac0ec56ff6e896e3add2d22b44b4d9/SdkProvider/AssertionsProvider",
+                            "constructInfo": {
+                              "fqn": "constructs.Construct",
+                              "version": "10.3.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents1fac0ec56ff6e896e3add2d22b44b4d9/Default",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents1fac0ec56ff6e896e3add2d22b44b4d9/Default/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/integ-tests-alpha.AwsApiCall",
+                      "version": "2.166.0-alpha.0"
+                    }
+                  },
+                  "AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b": {
+                    "id": "AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b",
+                    "children": {
+                      "SdkProvider": {
+                        "id": "SdkProvider",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/SdkProvider",
+                        "children": {
+                          "AssertionsProvider": {
+                            "id": "AssertionsProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/SdkProvider/AssertionsProvider",
+                            "constructInfo": {
+                              "fqn": "constructs.Construct",
+                              "version": "10.3.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/Default",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/Default/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "WaitFor": {
+                        "id": "WaitFor",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor",
+                        "children": {
+                          "IsCompleteProvider": {
+                            "id": "IsCompleteProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/IsCompleteProvider",
+                            "children": {
+                              "AssertionsProvider": {
+                                "id": "AssertionsProvider",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/IsCompleteProvider/AssertionsProvider",
+                                "constructInfo": {
+                                  "fqn": "constructs.Construct",
+                                  "version": "10.3.0"
+                                }
+                              },
+                              "Invoke": {
+                                "id": "Invoke",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/IsCompleteProvider/Invoke",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.CfnResource",
+                                  "version": "2.166.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                              "version": "2.166.0-alpha.0"
+                            }
+                          },
+                          "TimeoutProvider": {
+                            "id": "TimeoutProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/TimeoutProvider",
+                            "children": {
+                              "AssertionsProvider": {
+                                "id": "AssertionsProvider",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/TimeoutProvider/AssertionsProvider",
+                                "constructInfo": {
+                                  "fqn": "constructs.Construct",
+                                  "version": "10.3.0"
+                                }
+                              },
+                              "Invoke": {
+                                "id": "Invoke",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/TimeoutProvider/Invoke",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.CfnResource",
+                                  "version": "2.166.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                              "version": "2.166.0-alpha.0"
+                            }
+                          },
+                          "Role": {
+                            "id": "Role",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/Role",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/WaitFor/Resource",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.WaiterStateMachine",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "AssertionResults": {
+                        "id": "AssertionResults",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents885a9771c77bde99d633aad502b58b7b/AssertionResults",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnOutput",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/integ-tests-alpha.AwsApiCall",
+                      "version": "2.166.0-alpha.0"
+                    }
+                  },
+                  "SingletonFunction76b3e830a873425f8453eddd85c86925": {
+                    "id": "SingletonFunction76b3e830a873425f8453eddd85c86925",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction76b3e830a873425f8453eddd85c86925",
+                    "children": {
+                      "Staging": {
+                        "id": "Staging",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction76b3e830a873425f8453eddd85c86925/Staging",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.AssetStaging",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "Role": {
+                        "id": "Role",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction76b3e830a873425f8453eddd85c86925/Role",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "Handler": {
+                        "id": "Handler",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction76b3e830a873425f8453eddd85c86925/Handler",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0"
+                    }
+                  },
+                  "SingletonFunction5c1898e096fb4e3e95d5f6c67f3ce41a": {
+                    "id": "SingletonFunction5c1898e096fb4e3e95d5f6c67f3ce41a",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction5c1898e096fb4e3e95d5f6c67f3ce41a",
+                    "children": {
+                      "Staging": {
+                        "id": "Staging",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction5c1898e096fb4e3e95d5f6c67f3ce41a/Staging",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.AssetStaging",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "Role": {
+                        "id": "Role",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction5c1898e096fb4e3e95d5f6c67f3ce41a/Role",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "Handler": {
+                        "id": "Handler",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/SingletonFunction5c1898e096fb4e3e95d5f6c67f3ce41a/Handler",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0"
+                    }
+                  },
+                  "AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd": {
+                    "id": "AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd",
+                    "children": {
+                      "SdkProvider": {
+                        "id": "SdkProvider",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd/SdkProvider",
+                        "children": {
+                          "AssertionsProvider": {
+                            "id": "AssertionsProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd/SdkProvider/AssertionsProvider",
+                            "constructInfo": {
+                              "fqn": "constructs.Construct",
+                              "version": "10.3.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd/Default",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd/Default/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "AssertionResults": {
+                        "id": "AssertionResults",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatchDescribeAlarms7ac97419ee9a5ad62a161fc2b9933afd/AssertionResults",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnOutput",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/integ-tests-alpha.AwsApiCall",
+                      "version": "2.166.0-alpha.0"
+                    }
+                  },
+                  "AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents288f0d126d838d5369bf72736052b3a7": {
+                    "id": "AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents288f0d126d838d5369bf72736052b3a7",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents288f0d126d838d5369bf72736052b3a7",
+                    "children": {
+                      "SdkProvider": {
+                        "id": "SdkProvider",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents288f0d126d838d5369bf72736052b3a7/SdkProvider",
+                        "children": {
+                          "AssertionsProvider": {
+                            "id": "AssertionsProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents288f0d126d838d5369bf72736052b3a7/SdkProvider/AssertionsProvider",
+                            "constructInfo": {
+                              "fqn": "constructs.Construct",
+                              "version": "10.3.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents288f0d126d838d5369bf72736052b3a7/Default",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsPutLogEvents288f0d126d838d5369bf72736052b3a7/Default/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/integ-tests-alpha.AwsApiCall",
+                      "version": "2.166.0-alpha.0"
+                    }
+                  },
+                  "AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4": {
+                    "id": "AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4",
+                    "children": {
+                      "SdkProvider": {
+                        "id": "SdkProvider",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/SdkProvider",
+                        "children": {
+                          "AssertionsProvider": {
+                            "id": "AssertionsProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/SdkProvider/AssertionsProvider",
+                            "constructInfo": {
+                              "fqn": "constructs.Construct",
+                              "version": "10.3.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "Default": {
+                        "id": "Default",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/Default",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/Default/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.166.0"
+                        }
+                      },
+                      "WaitFor": {
+                        "id": "WaitFor",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor",
+                        "children": {
+                          "IsCompleteProvider": {
+                            "id": "IsCompleteProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/IsCompleteProvider",
+                            "children": {
+                              "AssertionsProvider": {
+                                "id": "AssertionsProvider",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/IsCompleteProvider/AssertionsProvider",
+                                "constructInfo": {
+                                  "fqn": "constructs.Construct",
+                                  "version": "10.3.0"
+                                }
+                              },
+                              "Invoke": {
+                                "id": "Invoke",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/IsCompleteProvider/Invoke",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.CfnResource",
+                                  "version": "2.166.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                              "version": "2.166.0-alpha.0"
+                            }
+                          },
+                          "TimeoutProvider": {
+                            "id": "TimeoutProvider",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/TimeoutProvider",
+                            "children": {
+                              "AssertionsProvider": {
+                                "id": "AssertionsProvider",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/TimeoutProvider/AssertionsProvider",
+                                "constructInfo": {
+                                  "fqn": "constructs.Construct",
+                                  "version": "10.3.0"
+                                }
+                              },
+                              "Invoke": {
+                                "id": "Invoke",
+                                "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/TimeoutProvider/Invoke",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.CfnResource",
+                                  "version": "2.166.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "@aws-cdk/integ-tests-alpha.AssertionsProvider",
+                              "version": "2.166.0-alpha.0"
+                            }
+                          },
+                          "Role": {
+                            "id": "Role",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/Role",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/WaitFor/Resource",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.166.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "@aws-cdk/integ-tests-alpha.WaiterStateMachine",
+                          "version": "2.166.0-alpha.0"
+                        }
+                      },
+                      "AssertionResults": {
+                        "id": "AssertionResults",
+                        "path": "test-log-metric-alarm/DefaultTest/DeployAssert/AwsApiCall@aws-sdk--client-cloudwatch-logsGetLogEvents7dc99a6ea1e35aadfac968d1dc2dc9f4/AssertionResults",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnOutput",
+                          "version": "2.166.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/integ-tests-alpha.AwsApiCall",
+                      "version": "2.166.0-alpha.0"
+                    }
+                  },
+                  "BootstrapVersion": {
+                    "id": "BootstrapVersion",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/BootstrapVersion",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnParameter",
+                      "version": "2.166.0"
+                    }
+                  },
+                  "CheckBootstrapVersion": {
+                    "id": "CheckBootstrapVersion",
+                    "path": "test-log-metric-alarm/DefaultTest/DeployAssert/CheckBootstrapVersion",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnRule",
+                      "version": "2.166.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Stack",
+                  "version": "2.166.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/integ-tests-alpha.IntegTestCase",
+              "version": "2.166.0-alpha.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/integ-tests-alpha.IntegTest",
+          "version": "2.166.0-alpha.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.166.0"
+    }
+  }
+}

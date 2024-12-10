@@ -1,0 +1,19 @@
+{
+  "version": "38.0.1",
+  "testCases": {
+    "e2e/DefaultTest": {
+      "stacks": [
+        "e2e-test-client"
+      ],
+      "cdkCommandOptions": {
+        "deploy": {
+          "args": {
+            "rollback": false
+          }
+        }
+      },
+      "assertionStack": "e2e/DefaultTest/DeployAssert",
+      "assertionStackName": "e2eDefaultTestDeployAssert5139CB31"
+    }
+  }
+}

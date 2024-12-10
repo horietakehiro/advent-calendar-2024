@@ -1,0 +1,32 @@
+{
+  "version": "38.0.1",
+  "files": {
+    "3dc242910380839ba379e8a209861908b5544abadf4d2188b9e04a5b6c6c946c": {
+      "source": {
+        "path": "asset.3dc242910380839ba379e8a209861908b5544abadf4d2188b9e04a5b6c6c946c",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "3dc242910380839ba379e8a209861908b5544abadf4d2188b9e04a5b6c6c946c.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "7101b268f591fd8eb9ea039ef9f7e9a9c831e9d120369c7e022f971cfa8f7b42": {
+      "source": {
+        "path": "sut-sse-rate-alarm.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "7101b268f591fd8eb9ea039ef9f7e9a9c831e9d120369c7e022f971cfa8f7b42.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

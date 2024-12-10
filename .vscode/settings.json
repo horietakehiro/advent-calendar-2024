@@ -1,0 +1,7 @@
+{
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "editor.indentSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.removeUnusedImports": "always"
+  }
+}

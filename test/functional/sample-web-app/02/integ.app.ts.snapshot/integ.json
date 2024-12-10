@@ -1,0 +1,20 @@
+{
+  "version": "38.0.1",
+  "testCases": {
+    "test-log-metric-alarm/DefaultTest": {
+      "stacks": [
+        "sut-cse-rate-alarm",
+        "sut-sse-rate-alarm"
+      ],
+      "cdkCommandOptions": {
+        "deploy": {
+          "args": {
+            "concurrency": 2
+          }
+        }
+      },
+      "assertionStack": "test-log-metric-alarm/DefaultTest/DeployAssert",
+      "assertionStackName": "testlogmetricalarmDefaultTestDeployAssert78C84BB9"
+    }
+  }
+}
