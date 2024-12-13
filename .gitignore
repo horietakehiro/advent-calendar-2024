@@ -10,3 +10,4 @@ cdk.out
 ts.snapshot
 cdk-integ.out.*
 typedocs
+docs/tmp
