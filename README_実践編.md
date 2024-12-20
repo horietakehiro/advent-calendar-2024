@@ -354,9 +354,9 @@ CDKではL2コンストラクトのエスケープハッチとして、CFNリソ
 
 
 <details>
-<summary>プロパティの上書きに対するテストトの例</summary>
+<summary>プロパティの上書きに対するテストの例</summary>
 
-```js:プロパティの上書きに対するテストトの例
+```js:プロパティの上書きに対するテストの例
 import { TypedTemplate } from "@horietakehiro/aws-cdk-utul/lib/assertions";
 import { AWS_S3_BUCKET } from "@horietakehiro/aws-cdk-utul/lib/types/cfn-resource-types";
 import { aws_s3 as s3, Stack } from "aws-cdk-lib";
@@ -1221,7 +1221,7 @@ export class SampleWebAppStack extends Stack {
 リファクタリング後の監視ロジックに対する機能テストは以下のように実装出来ます。
 
 - 2種類のログメトリックアラームを並列且つ独立してテストできるよう、テストに必要な一連のリソース群とテストケースを再利用可能なように定義します
-- Eメールサブスクリプションの代わり(≒**テストダブル**)としてLambda関数をSNSトピックにサブスクライブし、Lambda関数からCloudWatch Logsロググループに発報されたアラームを発報することで、CloudWatchアラームからSNSトピックへの発報をテストケール内で確認出来るようにします
+- Eメールサブスクリプションの代わり(≒**テストダブル**)としてLambda関数をSNSトピックにサブスクライブし、Lambda関数からCloudWatch Logsロググループに発報されたアラームを発報することで、CloudWatchアラームからSNSトピックへの発報をテストケース内で確認出来るようにします
 
 ![integ-test-target-refactored.drawio.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/866958/c8bf7bd1-04df-e7b3-61a0-649525d99196.png)
 
