@@ -165,7 +165,7 @@ export class SampleWebApp extends Construct {
     cseRateAlarm.addAlarmAction(new cwActions.SnsAction(props.topic));
     this.alarms["cseRate"] = cseRateAlarm;
 
-    // サーバーサイドエラー(4xx)となったリクエスト数をログからカウントするメトリクス
+    // サーバーサイドエラー(5xx)となったリクエスト数をログからカウントするメトリクス
     const sseRequestCount = this.webappLogGroup
       .addMetricFilter("SSERequestCount", {
         filterPattern: {
@@ -599,7 +599,7 @@ test("`props`で渡したCMKに適切なキーポリシーが設定される", (
 最後にスナップショットテストも実装し、結果的に以下の5つのようなコンパイルテストが実装出来ます。
 
 <details>
-<summary>SampleWebAppコンストラクタに対するコンパイルテスト</summary>
+<summary>SampleWebAppコンストラクトに対するコンパイルテスト</summary>
 
 ```js:SampleWebAppに対するコンパイルテスト
 import { aws_sns, Stack } from "aws-cdk-lib";
@@ -618,7 +618,7 @@ new SampleWebApp(stack, "SampleWebApp", {
   topic: topic,
 });
 const template = TypedTemplate.fromStack(stack);
-describe("SampleWebAppコンストラクタ", () => {
+describe("SampleWebAppコンストラクト", () => {
   test("`props`で指定した`webAppImageName`がタスク定義に設定されている", () => {
     const taskDefinition = template.getResource(AWS_ECS_TASKDEFINITION());
     expect(
@@ -669,7 +669,7 @@ describe("SampleWebAppコンストラクタ", () => {
 npm test test/unit/constructs/sample-web-app.test.ts 
 
  PASS  test/unit/constructs/sample-web-app.test.ts (6.105 s)
-  SampleWebAppコンストラクタ
+  SampleWebAppコンストラクト
     ✓ `props`で指定した`webAppImageName`がタスク定義に設定されている (2 ms)
     ✓ `props`で指定した`topic`がアラームアクションに設定されている
     ✓ "props"の"webAppImageName"の値が不適切(123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/nginx)な場合にバリデーションエラーとなる (4 ms)
@@ -709,7 +709,7 @@ Ran all test suites matching /test\/unit\/constructs\/sample-web-app.test.ts/i.
 
 
 <details>
-<summary>SampleWebAppコンストラクタに対する機能テスト</summary>
+<summary>SampleWebAppコンストラクトに対する機能テスト</summary>
 
 ```js:SampleWebAppに対する機能テスト
 import {
